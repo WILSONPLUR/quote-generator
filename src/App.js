@@ -1,10 +1,10 @@
-import "./App.css";
 import { useState, useEffect } from "react";
-import { Container, Button, Heading, Badge, Alert, AlertIcon } from "@chakra-ui/react";
+import { Container, Button, Badge, useToast, Text, Box, Center  } from "@chakra-ui/react";
 
 function App() {
   const [text, setText] = useState("");
   const [author, setAuthor] = useState("");
+  const toast = useToast();
 
   const fetchContent = async() => {
     let response = await fetch("http://api.quotable.io/random")
@@ -12,30 +12,45 @@ function App() {
     setText(quote.content);
     setAuthor(quote.author)
   }
+
+
   const copy = () => {
     navigator.clipboard.writeText(text).then(
-      () => {
-         return (<Alert status='success'><AlertIcon />Copied!</Alert>)
-      },
+      () => { 
+          return toast({
+            title: 'Quote copied!',
+            status: 'info',
+            duration: 3000,
+            isClosable: false,
+          })
+             },
       (err) => {
-        console.log(err);
+        return toast({
+          title: 'Error...Try again',
+          description: err,
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        })
       }
     );
+    
   };
   useEffect(() => {
     fetchContent();
   }, []);
   return (
-    <div className="App">
-      <div className="quote-card">
-        <Container maxW="container.md"  style={{ marginTop: 40 }}>
-          <Heading className="quote-text" as="h3" size="lg">
+        
+  
+    <Container display="flex" flexDirection="column" textAlign="center" centerContent maxW="container.md"  style={{ marginTop: 40 }}>
+         <Center h="600px">
+           <Box>
+         <Text fontSize="2xl" fontStyle="italic">
             {text}
-          </Heading>
+          </Text>
           <Badge style={{ marginTop: 10 }} colorScheme="purple">
             {author}
           </Badge>
-        </Container>
         <div className="quote-btns">
         <Button
           style={{ marginTop: 30, marginRight: 10 }}
@@ -56,9 +71,9 @@ function App() {
           Copy
         </Button>
         </div>
-       
-      </div>
-    </div>
+        </Box>
+         </Center>
+    </Container>
   );
 }
 
