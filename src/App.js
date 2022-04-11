@@ -1,6 +1,6 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import { Container, Button, Heading, Badge, Alert } from "@chakra-ui/react";
+import { Container, Button, Heading, Badge, Alert, AlertIcon } from "@chakra-ui/react";
 
 function App() {
   const [text, setText] = useState("");
@@ -15,10 +15,10 @@ function App() {
   const copy = () => {
     navigator.clipboard.writeText(text).then(
       () => {
-         <Alert as="div">Copied!</Alert>
+         return (<Alert status='success'><AlertIcon />Copied!</Alert>)
       },
       (err) => {
-        
+        console.log(err);
       }
     );
   };
@@ -28,7 +28,7 @@ function App() {
   return (
     <div className="App">
       <div className="quote-card">
-        <Container display="flex" maxW="container.md"  style={{ marginTop: 40 }}>
+        <Container maxW="container.md"  style={{ marginTop: 40 }}>
           <Heading className="quote-text" as="h3" size="lg">
             {text}
           </Heading>
